@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>House Price Prediction</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+</head>
+<body class="bg-dark">
+    <div class="container">
+        <div class="row">
+            <div class="card" style="width:100%;height:100%;margin-top:50px;">
+                <div class="card-header">
+                    <h1>House Price Prediction</h1>
+                </div>
+                <div class="card-body">
+                    <form method="post" accept-charset="utf-8">
+                        <div class="row">
+                            <div class="col-md-6 form-group" style="text-align: center;">
+                                <label><b>Select Location</b></label>
+                                <select class="selectpicker form-control" id="location" name="location" required='1'>
+                                    {% for i in location %}
+                                    <option value="{{ i }}">{{ i }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-6 form-group" style="text-align: center;">
+                                <label><b>BHK</b></label>
+                                <input type="text" class="form-control" id="bhk" name="bhk" placeholder="BHK">
+                            </div>
+                            <div class="col-md-6 form-group" style="text-align: center;">
+                                <label><b>Bathroom</b></label>
+                                <input type="text" class="form-control" id="bedroom" name="bedroom" placeholder="Bedroom">
+                            </div>
+                            <div class="col-md-6 form-group" style="text-align: center;">
+                                <label><b>sqfeet</b></label>
+                                <input type="text" class="form-control" id="swg" name="swg" placeholder="Bathroom">
+                            </div>
+                            <div class="col-md-12 form-group p-2" style="text-align: center;">
+                                <button class="btn btn-primary form-control" onclick="send_data()" class="submit" id="submit">Predict Price </button>
+                            </div>
+                        </div>
+                    </form>
+                    <br>
+                    <div class="col-md-12" style="text-align: center;">
+                        <h3><span id="prediction"></span></h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelector('form').addEventListener("submit", form_handler);
+        });
+
+        function form_handler(event) {
+            event.preventDefault(); // Don't submit the form normally
+        }
+
+        function send_data() {
+            var fd = new FormData(document.querySelector('form'));
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/p', true);
+            document.getElementById("prediction").innerHTML = "Wait Predicting Price!....";
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == XMLHttpRequest.DONE) {
+                    document.getElementById('prediction').innerHTML = "Prediction: " + xhr.responseText;
+                }
+            };
+
+            xhr.onload = function () {
+                // Code to be executed after the request completes (optional)
+            };
+
+            xhr.send(fd);
+        }
+    </script>
+</body>
+</html>
